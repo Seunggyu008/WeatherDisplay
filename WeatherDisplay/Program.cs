@@ -20,7 +20,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireLowercase = true;
 
     // User requirements
-    options.User.RequireUniqueEmail = true;
+    options.User.RequireUniqueEmail = false;
 
     // Sign-in requirements
     options.SignIn.RequireConfirmedEmail = true; 
