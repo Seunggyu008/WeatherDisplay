@@ -23,7 +23,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.User.RequireUniqueEmail = false;
 
     // Sign-in requirements
-    options.SignIn.RequireConfirmedEmail = true; 
+    options.SignIn.RequireConfirmedEmail = false; 
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 

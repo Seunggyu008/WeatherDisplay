@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Details Page";
+}
+
+<div class="container mt-4">
+    <h2>Details Page</h2>
+    <p>@ViewBag.Message</p>
+
+    <div class="alert alert-info">
+        <strong>ID received:</strong> @ViewBag.Id
+    </div>
+
+    <a asp-action="Index" class="btn btn-primary">Back to Index</a>
+</div>
