@@ -1,0 +1,27 @@
+﻿@model WeatherDisplay.Models.Authentication.ProfileEditVM
+
+<h2>프로필 수정</h2>
+
+<form asp-action="EditUserProfile" method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+
+    <div>
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" type="date" />
+        <span asp-validation-for="DateOfBirth"></span>
+    </div>
+
+    <button type="submit" class="btn btn-info">저장</button>
+</form>
