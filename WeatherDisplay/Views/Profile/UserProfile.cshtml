@@ -1,0 +1,21 @@
+﻿@model WeatherDisplay.Models.Authentication.ProfileVM
+@{
+    ViewData["Title"] = "사용자 프로필";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<ul>
+    <li><strong>이메일:</strong> @Model.Email</li>
+    <li><strong>이름:</strong> @Model.FirstName @Model.LastName</li>
+    <li><strong>생일:</strong> @Model.DateOfBirth.ToString("yyyy-MM-dd")</li>
+</ul>
+
+ <a asp-controller="Profile" asp-action="EditUserProfile" class="btn btn-info">프로필 수정</a>
+
+@if (TempData["StatusMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["StatusMessage"]
+    </div>
+}
