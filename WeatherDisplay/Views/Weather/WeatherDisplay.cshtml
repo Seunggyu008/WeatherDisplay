@@ -1,0 +1,96 @@
+@model WeatherDisplay.Models.WeatherDisplay.WeatherDataVM
+
+@{
+    ViewData["Title"] = "Weather Information";
+}
+
+<h2>
+    해당 위치의 날씨 정보입니다.
+</h2>
+
+
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+else if (Model != null)
+{
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>하늘</th>
+                <td>
+                    @{
+                        string skyStatusText = "";
+                        switch (Model.SkyStatus)
+                        {
+                            case 1:
+                            case 2:
+                                skyStatusText = "맑음";
+                                break;
+                            case 3:
+                                skyStatusText = "구름많음";
+                                break;
+                            case 4:
+                                skyStatusText = "흐림";
+                                break;
+                            default:
+                                skyStatusText = "Unknown";
+                                break;
+                        }
+                        @skyStatusText
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th>최고 온도</th>
+                <td>@Model.MaxTemp °C</td>
+            </tr>
+            <tr>
+                <th>최저온도</th>
+                <td>@Model.MinTemp °C</td>
+            </tr>
+            <tr>
+                <th>강수확률</th>
+                <td>@Model.Precipitation %</td>
+            </tr>
+            <tr>
+                <th>습도</th>
+                <td>@Model.Wetness %</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <p>조회가능한 날씨정보가 없습니다. 뭔가 문제가 생겼어요</p>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("getWeatherBtn").addEventListener("click", function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    window.location.href = "/WeatherDisplay/GetWeatherData?latitude=" + lat + "&longitude=" + lon;
+                }, function(error) {
+                    alert("위치조회를 거부하셨습니다.");
+                });
+            } else {
+                alert("GeolocationAPI 작동 불가");
+            }
+        });
+
+        navigator.geolocation.getCurrentPosition(function(position)) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lon;
+        }, function(error) {
+            alert("위치조회를 거부하셨습니다." );
+        }
+    </script>
+}

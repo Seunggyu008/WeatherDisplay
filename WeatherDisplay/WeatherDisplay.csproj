@@ -21,8 +21,6 @@
 
   <ItemGroup>
     <Folder Include="MappingProfiles\" />
-    <Folder Include="Models\WeatherDisplay\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,56 @@
-﻿@{
+﻿@model WeatherDisplay.Models.RegionViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <h1 class="display-4">오늘도 좋은 하루가 되길바래요!</h1>
+    <button id="getWeatherBtn" class="btn btn-primary">현재 날씨 조회</button>
+    <hr />
+    <form asp-controller="WeatherDisplay" asp-action="GetWeatherData" method="get">
+        <div class="form-group">
+            <label for="regionSelect">Select a Region</label>
+            <select id="regionSelect" name="regionSelect" class="form-control">
+                <option value="">-- 위치를 선택해주세요 --</option>
+                @foreach (var region in Model.Regions)
+                {
+                    <option value="@region.Latitude,@region.Longitude">@region.Name</option>
+                }
+            </select>
+            <input type="hidden" id="latitude" name="latitude" />
+            <input type="hidden" id="longitude" name="longitude" />
+        </div>
+        <button type="submit" class="btn btn-secondary">Search by Region</button>
+    </form>
+<div/>
+
+@section Scripts {
+    <script>
+        document.getElementById("getWeatherBtn").addEventListener("click", function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    window.location.href = "/WeatherDisplay/GetWeatherData?latitude=" + lat + "&longitude=" + lon;
+                }, function(error) {
+                    alert("위치조회를 거부하셨습니다.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+
+        document.getElementById("regionSelect").addEventListener("change", function() {
+            var selectedValue = this.value;
+            if (selectedValue) {
+                var coords = selectedValue.split(',');
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+            } else {
+                document.getElementById("latitude").value = "";
+                document.getElementById("longitude").value = "";
+            }
+        });
+    </script>
+}
