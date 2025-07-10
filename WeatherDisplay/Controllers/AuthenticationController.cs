@@ -45,6 +45,7 @@ namespace WeatherDisplay.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
+                    DateOfBirth = model.DateOfBirth
 
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -52,6 +53,16 @@ namespace WeatherDisplay.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    /* 이메일 인증기능 구현 예정
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    var confirmationLink = Url.Action(
+                        "ConfirmEmail", "Account",
+                        new { userId = user.Id, token = token },
+                        protocol: HttpContext.Request.Scheme
+                        );
+                    */
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");

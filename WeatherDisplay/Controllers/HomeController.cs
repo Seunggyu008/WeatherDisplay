@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WeatherDisplay.Models;
 using System.Collections.Generic;
+using WeatherDisplay.Models.Regions;
 
 namespace WeatherDisplay.Controllers
 {
@@ -16,7 +17,7 @@ namespace WeatherDisplay.Controllers
 
         public IActionResult Index()
         {
-            var model = new RegionViewModel
+            var model = new RegionsVM
             {
                 Regions = new List<RegionModel>
                 {

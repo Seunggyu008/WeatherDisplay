@@ -1,0 +1,15 @@
+﻿@model WeatherDisplay.Models.Profile.LastNameEditVM;
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-3 fw-bold">이름</div>
+    <div class="col-md-6">@Model.LastName</div>
+    <div class="col-md-3 text-end">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleSection('lastNameForm')">변경</button>
+    </div>
+    <div class="col-12 mt-2" id="lastNameForm" style="display:none;">
+        <form asp-action="EditUserLastName" method="post">
+            <input asp-for="LastName" class="form-control" />
+            <button type="submit" class="btn btn-primary mt-2">저장</button>
+        </form>
+    </div>
+</div>

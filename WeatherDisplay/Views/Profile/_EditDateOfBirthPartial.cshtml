@@ -1,0 +1,15 @@
+﻿@model WeatherDisplay.Models.Profile.DateOfBirthEditVM;
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-3 fw-bold">생년월일</div>
+    <div class="col-md-6">@Model.DateOfBirth</div>
+    <div class="col-md-3 text-end">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleSection('birthdayForm')">변경</button>
+    </div>
+    <div class="col-12 mt-2" id="birthdayForm" style="display:none;">
+        <form asp-action="EditUserBirthDate" method="post">
+            <input asp-for="DateOfBirth" type="date" class="form-control" />
+            <button type="submit" class="btn btn-primary mt-2">저장</button>
+        </form>
+    </div>
+</div>

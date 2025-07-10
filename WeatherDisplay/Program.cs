@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using WeatherDisplay.Data;
 using WeatherDisplay.Models;
-using WeatherDisplay.Services;
+using WeatherDisplay.Services.Weather;
+using WeatherDisplay.MappingProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +20,15 @@ builder.Services.Configure<WeatherApiSettings>(
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IWeatherService, WeatherDisplayService>();
 
+
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddMaps(Assembly.GetExecutingAssembly());
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -29,21 +40,28 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = true;
 
-    // 이메일 요구사항 설정
-    options.User.RequireUniqueEmail = false;
+    //이메일을 사용자이름으로 설정
+    options.User.RequireUniqueEmail = true;
 
     // 회원가입 후 이메일 확인 요구사항 설정
-    options.SignIn.RequireConfirmedEmail = false; 
+    options.SignIn.RequireConfirmedEmail = true; 
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+//보안 관련 쿠키기반 설정
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
 
 builder.Services.AddControllersWithViews();
 
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+//HTTP 요청 파이프라인 설정
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -51,7 +69,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

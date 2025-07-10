@@ -19,12 +19,17 @@ namespace WeatherDisplay.Models.Account
         [Display(Name = "이름")]
         public string LastName { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "생일을 입력해주세요.")]
+        [DataType(DataType.Date)]
+        public DateOnly DateOfBirth { get; set; }
+
         [Required(ErrorMessage = "비밀번호를 입력해주세요.")]
         [StringLength(100, ErrorMessage = "비밀번호는 6자 이상이여야합니다.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "비밀번호")]
         public string Password { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "비밀번호 입력 후 같은 비밀번호를 적어주세요.")]
         [DataType(DataType.Password)]
         [Display(Name = "비밀번호 확인")]
         [Compare("Password", ErrorMessage = "입력하신 비밀번호와 달라요.")]

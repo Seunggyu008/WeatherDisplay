@@ -1,4 +1,6 @@
-﻿namespace WeatherDisplay.Models.WeatherDisplay
+﻿using WeatherDisplay.Models.Regions;
+
+namespace WeatherDisplay.Models.WeatherDisplay
 {
     public class WeatherDataVM
     {

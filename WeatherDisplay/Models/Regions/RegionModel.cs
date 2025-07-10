@@ -1,4 +1,4 @@
-namespace WeatherDisplay.Models
+namespace WeatherDisplay.Models.Regions
 {
     public class RegionModel
     {
