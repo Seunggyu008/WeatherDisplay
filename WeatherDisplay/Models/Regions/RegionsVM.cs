@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace WeatherDisplay.Models
+namespace WeatherDisplay.Models.Regions
 {
-    public class RegionViewModel
+    public class RegionsVM
     {
         public List<RegionModel> Regions { get; set; }
     }

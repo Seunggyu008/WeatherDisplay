@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace WeatherDisplay.Data
+namespace WeatherDisplay.Models.Profile
 {
-    public class ApplicationUser : IdentityUser
+    public class ProfileVM 
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public DateOnly DateOfBirth { get; set; }
     }
 }

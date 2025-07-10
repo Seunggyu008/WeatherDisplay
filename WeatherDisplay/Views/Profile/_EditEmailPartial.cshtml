@@ -1,0 +1,16 @@
+﻿@model WeatherDisplay.Models.Profile.EmailEditVM;
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-3 fw-bold">이메일</div>
+    <div class="col-md-6">@Model.Email</div>
+    <div class="col-md-3 text-end">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleSection('emailForm')">변경</button>
+    </div>
+    <div class="col-12 mt-2" id="emailForm" style="display:none;">
+        <form asp-action="EditUserEmail" method="post">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger" id="emailValidationSpan"></span>
+            <button type="submit" class="btn btn-primary mt-2">저장</button>
+        </form>
+    </div>
+</div>

@@ -1,21 +1,31 @@
-﻿@model WeatherDisplay.Models.Authentication.ProfileVM
+﻿@using WeatherDisplay.Models.Profile
+@model WeatherDisplay.Models.Profile.ProfileEditVM
 @{
     ViewData["Title"] = "사용자 프로필";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class= "mb-4">@ViewData["Title"]</h2>
 
-<ul>
-    <li><strong>이메일:</strong> @Model.Email</li>
-    <li><strong>이름:</strong> @Model.FirstName @Model.LastName</li>
-    <li><strong>생일:</strong> @Model.DateOfBirth.ToString("yyyy-MM-dd")</li>
-</ul>
+<div class="card">
+    <div class="card-body">
+        @await Html.PartialAsync("_EditFirstNamePartial", Model.FirstNameEdit)
 
- <a asp-controller="Profile" asp-action="EditUserProfile" class="btn btn-info">프로필 수정</a>
+        @await Html.PartialAsync("_EditLastNamePartial", Model.LastNameEdit)
 
-@if (TempData["StatusMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["StatusMessage"]
+        @await Html.PartialAsync("_EditEmailPartial", Model.EmailEdit)
+
+        @await Html.PartialAsync("_EditDateOfBirthPartial", Model.DateOfBirthEdit)
+
+        @await Html.PartialAsync("_EditPasswordPartial", Model.PasswordEdit)
     </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function toggleSection(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === "none") ? "block" : "none";
+        }
+    </script>
 }

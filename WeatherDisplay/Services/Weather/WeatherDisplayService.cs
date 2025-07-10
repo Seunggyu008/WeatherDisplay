@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.Extensions.Options;
-using WeatherDisplay.Utils; 
+using WeatherDisplay.Utils;
 using System.Text.Json;
 using WeatherDisplay.Models;
 using WeatherDisplay.Models.WeatherDisplay;
 
-namespace WeatherDisplay.Services
+namespace WeatherDisplay.Services.Weather
 {
     //Loose coupling을 위한 인터페이스
     public interface IWeatherService
@@ -33,8 +33,6 @@ namespace WeatherDisplay.Services
             var (baseDate, baseTime) = DateTimeCalculator.GetBaseDateTimeForForecast();
 
             var requestUrl = $"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey={serviceKey}&dataType=JSON&numOfRows=1000&pageNo=1&base_date={baseDate}&base_time=0200&nx={nx}&ny={ny}";
-
-            _logger.LogInformation("Making API call with ServiceKey: {ServiceKey} and URL: {RequestUrl}", serviceKey, requestUrl);
 
             var response = await client.GetAsync(requestUrl);
 
