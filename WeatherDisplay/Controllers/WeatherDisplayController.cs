@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WeatherDisplay.Models;
-using WeatherDisplay.Models.WeatherDisplay;
 using WeatherDisplay.Services.Weather;
 using WeatherDisplay.Utils;
 

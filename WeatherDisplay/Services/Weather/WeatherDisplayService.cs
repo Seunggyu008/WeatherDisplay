@@ -1,9 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using WeatherDisplay.Utils;
 using System.Text.Json;
-using WeatherDisplay.Models;
-using WeatherDisplay.Models.WeatherDisplay;
 
 namespace WeatherDisplay.Services.Weather
 {

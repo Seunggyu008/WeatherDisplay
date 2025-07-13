@@ -29,7 +29,7 @@ namespace WeatherDisplay.Models.Account
         [Display(Name = "비밀번호")]
         public string Password { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "비밀번호 입력 후 같은 비밀번호를 적어주세요.")]
+        [Required(ErrorMessage = "비밀번호 입력 후 동일한 비밀번호를 적어주세요.")]
         [DataType(DataType.Password)]
         [Display(Name = "비밀번호 확인")]
         [Compare("Password", ErrorMessage = "입력하신 비밀번호와 달라요.")]
