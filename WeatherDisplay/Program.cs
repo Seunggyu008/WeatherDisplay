@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using WeatherDisplay.Data;
-using WeatherDisplay.Models;
 using WeatherDisplay.Services.Weather;
-using WeatherDisplay.MappingProfiles;
+using Microsoft.AspNetCore.Authentication;
+using WeatherDisplay.Services.Authentication;
+using WeatherDisplay.Services.Profile;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +18,8 @@ builder.Services.Configure<WeatherApiSettings>(
 
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IWeatherService, WeatherDisplayService>();
+builder.Services.AddScoped<IAuthService, AppAuthenticationService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 
 builder.Services.AddAutoMapper(config =>
@@ -44,7 +45,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.User.RequireUniqueEmail = true;
 
     // 회원가입 후 이메일 확인 요구사항 설정
-    options.SignIn.RequireConfirmedEmail = true; 
+    options.SignIn.RequireConfirmedEmail = false; 
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -54,6 +55,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.Strict;
+    options.LoginPath = "/Authentication/Login";
 });
 
 builder.Services.AddControllersWithViews();

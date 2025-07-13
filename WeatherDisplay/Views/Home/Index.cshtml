@@ -5,44 +5,60 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">오늘도 좋은 하루가 되길바래요!</h1>
-    <button id="getWeatherBtn" class="btn btn-primary">현재 날씨 조회</button>
-    <hr />
-    <form asp-controller="WeatherDisplay" asp-action="GetWeatherData" method="get">
-        <div class="form-group">
-            <label for="regionSelect">Select a Region</label>
-            <select id="regionSelect" name="regionSelect" class="form-control">
-                <option value="">-- 위치를 선택해주세요 --</option>
-                @foreach (var region in Model.Regions)
-                {
-                    <option value="@region.Latitude,@region.Longitude">@region.Name</option>
-                }
-            </select>
-            <input type="hidden" id="latitude" name="latitude" />
-            <input type="hidden" id="longitude" name="longitude" />
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">오늘도 좋은 하루가 되길 바래요!</h1>
+        <p class="lead text-muted">현재 위치 또는 지역을 선택해서 날씨를 조회해보세요</p>
+        <button id="getWeatherBtn" class="btn btn-outline-primary btn-lg mt-3">
+            <i>현재 위치 날씨 조회</i>
+        </button>
+    </div>
+
+    <div class="card mx-auto shadow" style="max-width: 600px;">
+        <div class="card-body">
+            <h5 class="card-title mb-4 text-center">지역으로 날씨 조회</h5>
+            <form asp-controller="WeatherDisplay" asp-action="GetWeatherData" method="get">
+                <div class="mb-3">
+                    <label for="regionSelect" class="form-label">지역 선택</label>
+                    <select id="regionSelect" name="regionSelect" class="form-select">
+                        <option value="">-- 위치를 선택해주세요 --</option>
+                        @foreach (var region in Model.Regions)
+                        {
+                            <option value="@region.Latitude,@region.Longitude">@region.Name</option>
+                        }
+                    </select>
+                </div>
+                <input type="hidden" id="latitude" name="latitude" />
+                <input type="hidden" id="longitude" name="longitude" />
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search me-1">날씨 조회</i>
+                    </button>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-secondary">Search by Region</button>
-    </form>
-<div/>
+    </div>
+</div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
         document.getElementById("getWeatherBtn").addEventListener("click", function () {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
+                navigator.geolocation.getCurrentPosition(function (position) {
                     var lat = position.coords.latitude;
                     var lon = position.coords.longitude;
                     window.location.href = "/WeatherDisplay/GetWeatherData?latitude=" + lat + "&longitude=" + lon;
-                }, function(error) {
-                    alert("위치조회를 거부하셨습니다.");
+                }, function (error) {
+                    alert("위치 조회를 거부하셨습니다.\n날씨를 조회 할려면 페이지를 새로고침하고 위치 조회를 허락해주세요 :)");
                 });
             } else {
-                alert("Geolocation is not supported by this browser.");
+                alert("Geolocation을 지원하지 않는 브라우저입니다.");
             }
         });
 
-        document.getElementById("regionSelect").addEventListener("change", function() {
+        document.getElementById("regionSelect").addEventListener("change", function () {
             var selectedValue = this.value;
             if (selectedValue) {
                 var coords = selectedValue.split(',');
