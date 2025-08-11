@@ -1,12 +1,27 @@
-﻿@using WeatherDisplay.Models.Regions
+﻿@using Microsoft.AspNetCore.Identity
+@using WeatherDisplay.Models.Regions
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @model RegionsVM
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
+<meta http-equiv="Permissions-Policy" content="geolocation=self">
+
 <div class="container mt-5">
     <div class="text-center mb-5">
+        @{
+            if(TempData.ContainsKey("Message"))
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+        }
         <h1 class="display-5 fw-bold text-primary">오늘도 좋은 하루가 되길 바래요!</h1>
         <p class="lead text-muted">현재 위치 또는 지역을 선택해서 날씨를 조회해보세요</p>
         <button id="getWeatherBtn" class="btn btn-outline-primary btn-lg mt-3">
@@ -44,19 +59,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        document.getElementById("getWeatherBtn").addEventListener("click", function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var lat = position.coords.latitude;
-                    var lon = position.coords.longitude;
-                    window.location.href = "/WeatherDisplay/GetWeatherData?latitude=" + lat + "&longitude=" + lon;
-                }, function (error) {
-                    alert("위치 조회를 거부하셨습니다.\n날씨를 조회 할려면 페이지를 새로고침하고 위치 조회를 허락해주세요 :)");
-                });
-            } else {
-                alert("Geolocation을 지원하지 않는 브라우저입니다.");
-            }
-        });
+        document.getElementById("getWeatherBtn").addEventListener("click", successCallback, errorCallback);
 
         document.getElementById("regionSelect").addEventListener("change", function () {
             var selectedValue = this.value;
@@ -69,5 +72,33 @@
                 document.getElementById("longitude").value = "";
             }
         });
+        
+        function successCallback(position){
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    window.location.href = "/WeatherDisplay/GetWeatherData?latitude=" + lat + "&longitude=" + lon;
+                    console.log("위치 조회 성공:", lat, lon);
+                })
+            }
+        }
+
+        function errorCallback(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("사용자가 위치 조회를 거부하였습니다.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("사용자의 위치를 조회할 수 없습니다.");
+                    break;
+                case error.TIMEOUT:
+                    alert("사용자의 위치를 조회 타임아웃.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("로그에 없는 에러가 발생하였습니다.");
+                    break;
+            }
+        }
     </script>
 }

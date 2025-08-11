@@ -5,6 +5,15 @@
 }
 
 <div class="container mt-5" style="max-width: 600px;">
+    @{
+        if (TempData.ContainsKey("WeatherMessage"))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["WeatherMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    }
     <h2 class="display-6 fw-bold text-primary text-center mb-5">@ViewData["Title"]</h2>
 
 

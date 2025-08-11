@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using WeatherDisplay.Models.Profile;
-using AutoMapper;
+//using AutoMapper;
 using WeatherDisplay.Services.Profile;
 
 namespace WeatherDisplay.Controllers
@@ -13,14 +13,14 @@ namespace WeatherDisplay.Controllers
         private readonly IProfileService _profileService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
         
-        public ProfileController(IProfileService profileService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMapper mapper)
+        public ProfileController(IProfileService profileService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _profileService = profileService;
             _userManager = userManager;
             _signInManager = signInManager;
-            _mapper = mapper;
+            //_mapper = mapper;
         }
 
         [HttpGet]
@@ -30,8 +30,16 @@ namespace WeatherDisplay.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login");
 
-            var profileModel = _mapper.Map<ProfileVM> (user);
-
+            var viewModel = new ProfileEditAllVM
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                Email = user.Email,
+                PasswordEdit = new PasswordEditVM()
+            };
+       
+            /*
             var viewModel = new ProfileEditVM
             {
                 Profile = profileModel,
@@ -41,11 +49,31 @@ namespace WeatherDisplay.Controllers
                 DateOfBirthEdit = new DateOfBirthEditVM { DateOfBirth = profileModel.DateOfBirth },
                 PasswordEdit = new PasswordEditVM()
             };
+            */
 
-            return View("UserProfile", viewModel);
+            return View("UserProfileAll", viewModel);
         }
 
-        //사용자 성을 변경하기 위한 메서드입니다.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUserProfile(ProfileEditAllVM model)
+        {
+            var userId = _userManager.GetUserId(User);
+            var result = await _profileService.EditAllProfileAsync(userId, model);
+            if (result.Succeeded)
+            {
+                TempData["StatusMessage"] = "프로필이 성공적으로 변경되었습니다.";
+                return RedirectToAction("GetUserProfile");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View("UserProfile", model);
+        }
+
+            //사용자 성을 변경하기 위한 메서드입니다.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUserFirstName(FirstNameEditVM model)

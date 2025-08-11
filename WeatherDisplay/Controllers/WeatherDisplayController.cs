@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WeatherDisplay.Services.Weather;
 using WeatherDisplay.Utils;
 
 namespace WeatherDisplay.Controllers
 {
+    [Authorize]
     public class WeatherDisplayController : Controller
     {
         private readonly IWeatherService _weatherDisplayService;
@@ -22,9 +24,10 @@ namespace WeatherDisplay.Controllers
 
             if (weatherResponse == null)
             {
-                ViewData["ErrorMessage"] = "Failed to retrieve weather data. Please try again later.";
+                ViewData["ErrorMessage"] = "날씨정보를 가져오지 못했습니다. 조금 후에 다시 시도해주세요.";
                 return View("~/Views/Weather/WeatherDisplay.cshtml");
             }
+
 
             var weatherData = new WeatherDataVM();
 
@@ -41,8 +44,12 @@ namespace WeatherDisplay.Controllers
                 weatherData.MinTemp = tmnItem != null ? (int)float.Parse(tmnItem.FcstValue) : 0;
                 weatherData.Precipitation = int.Parse(items.FirstOrDefault(i => i.Category == "POP")?.FcstValue ?? "0");
                 weatherData.Wetness = int.Parse(items.FirstOrDefault(i => i.Category == "REH")?.FcstValue ?? "0");
+
+
+                TempData["WeatherMessage"] = "성공적으로 날씨정보를 가져왔습니다.";
             }
 
+            
             return View("~/Views/Weather/WeatherDisplay.cshtml", weatherData);
         }
     }

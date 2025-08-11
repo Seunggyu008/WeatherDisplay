@@ -34,6 +34,7 @@ namespace WeatherDisplay.Controllers
 
                 if(result.Succeeded)
                 {
+                    TempData["Message"] = "회원가입에 성공하셨습니다.";
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -72,6 +73,7 @@ namespace WeatherDisplay.Controllers
 
             if (result.Succeeded)
             {
+                TempData["Message"] = "성공적으로 로그인하였습니다.";
                 return RedirectToLocal(returnUrl);
             }
 
@@ -90,6 +92,7 @@ namespace WeatherDisplay.Controllers
         public async Task<IActionResult> LogOut(string? returnUrl)
         {
             await _authService.LogoutUserAsync();
+            TempData["Message"] = "성공적으로 로그아웃하셨습니다.";
             return RedirectToLocal(returnUrl);
         }
 

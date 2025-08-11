@@ -11,6 +11,7 @@ namespace WeatherDisplay.Services.Profile
     {
 
         //Task<ServiceResult<ProfileVM>> GetUserProfileAsync(string userId);
+        Task<IdentityResult> EditAllProfileAsync(string? userId, ProfileEditAllVM model);
         Task<IdentityResult> EditFirstNameAsync(string userId, FirstNameEditVM model);
         Task<IdentityResult> EditLastNameAsync(string userId, LastNameEditVM model);
         Task<IdentityResult> EditDobAsync(string userId, DateOfBirthEditVM model);
@@ -23,13 +24,28 @@ namespace WeatherDisplay.Services.Profile
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IMapper _mapper;
 
-        public ProfileService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMapper mapper)
+        public ProfileService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _mapper = mapper;
+        }
+
+        public async Task<IdentityResult> EditAllProfileAsync(string? userId, ProfileEditAllVM model)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if(user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "사용자를 찾을 수 없습니다." });
+            }
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.DateOfBirth = model.DateOfBirth;
+            user.Email = model.Email;
+
+            return await _userManager.UpdateAsync(user);
         }
 
         //성을 바꾸는 로직을 당담하는 서비스입니다.

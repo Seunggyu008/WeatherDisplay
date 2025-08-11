@@ -21,6 +21,7 @@ namespace WeatherDisplay.Models.Account
 
         [Required(ErrorMessage = "생일을 입력해주세요.")]
         [DataType(DataType.Date)]
+        [Display(Name = "생년월일")]
         public DateOnly DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "비밀번호를 입력해주세요.")]

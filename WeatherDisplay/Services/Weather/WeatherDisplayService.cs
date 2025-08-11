@@ -36,6 +36,7 @@ namespace WeatherDisplay.Services.Weather
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonString);
                 return JsonSerializer.Deserialize<WeatherResponseVM>(jsonString, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true

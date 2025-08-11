@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using WeatherDisplay.Models.Account;
 
 namespace WeatherDisplay.Services.Authentication
@@ -40,6 +39,7 @@ namespace WeatherDisplay.Services.Authentication
 
             if (!result.Succeeded)
             {
+                _logger.LogError("계정 생성에 실패하였습니다: {Errors}", string.Join(", ", result.Errors.Select(e => e.Description)));
                 return IdentityResult.Failed(new IdentityError { Description = "계정 생성에 실패하였습니다." });
             }
             else
@@ -64,7 +64,7 @@ namespace WeatherDisplay.Services.Authentication
             {
                 _logger.LogInformation("성공적으로 로그인하였습니다");
                 return (IdentityResult.Success);
-            }
+            } 
 
             var errors = new List<string>();
             
